@@ -51,7 +51,7 @@ add_python_symlink()
 #parameter count check
 if [ "$#" -ne 2 ]; then
     echo "Usage:"
-    echo "on_host.sh RASPBERRYIP QTVERSIONTOCHECKOUT"
+    echo "on_host.sh RASPBERRY_IP QTVERSION_TO_CHECKOUT"
     echo "Example:"
     echo "on_host.sh pi@raspberrypi 5.12"
     echo "or:"
@@ -127,12 +127,13 @@ else
     
     
     echo "Checking for your newly generated public key...."
+    
     if [ -f "$PUBLIC_KEY1" ]; then
         echo "Trying to setup your public RSA key on your Raspberry"
         ssh-copy-id -i $PUBLIC_KEY1 $1
         elif [ - "$PUBLIC_KEY2" ]; then
         echo "Trying to setup your public DSA key on your Raspberry"
-        ssh-copy-id -i $PUBLIC_KEY1 $1
+        ssh-copy-id -i $PUBLIC_KEY2 $1
     else
         echo "Could not find either an default RSA or default DSA key. You have to authenticate yourself against rsync."
     elif
@@ -145,7 +146,7 @@ echo "copying on_pi.sh to the Raspberry"
 scp ./on_rpi.sh $1:/home/pi
 
 #set execution flag on the script and run it
-echo "running script to prepare the pi. This may take a while...."
+echo "running script to prepare the pi, on the pi. This may take a while...."
 ssh $1 'chmod +x /home/pi/on_pi.sh && /home/pi/on_pi.sh'
 
 #Sync libraries from Raspberry Pi
@@ -174,6 +175,7 @@ git checkout $2
 
 #Cross Compile QT
 #configure
+echo "Configuring QT"
 ./configure -release -opengl es2 -device linux-rasp-pi3-g++ -device-option CROSS_COMPILE=~/raspi/tools/gcc-linaro-7.5.0-2019.12-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf- -sysroot ~/raspi/sysroot -opensource -confirm-license -nomake examples -no-compile-examples -skip qtwayland  -skip qtwebengine -make libs -prefix /usr/local/qt5pi -skip qtlocation -v -no-use-gold-linker
 
 echo "building QT, running make. Grab yourself a coffee and enjoy the show."
