@@ -1,3 +1,4 @@
 #!/bin/bash
 
-echo "export QT_QPA_PLATFORM=eglfs" >> ~/.bashrc 
+echo "export QT_QPA_PLATFORM=eglfs" >> ~/.bashrc
+ 
