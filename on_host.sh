@@ -1,4 +1,5 @@
 #!/bin/bash
+
 #variables
 FILE="sysroot-relativelinks.py"
 PYLINK="/bin/python"
@@ -6,6 +7,12 @@ IDFILE1=~/.ssh/id_rsa.pub
 IDFILE2=~/.ssh/id_dsa.pub
 PUBLIC_KEY1=~/.ssh/id_rsa.pub
 PUBLIC_KEY2=~/.ssh/id_dsa.pub
+
+wait_key_press()
+{
+    
+    read -n 1 -s -r -p "Press any key to continue"
+}
 
 add_python_symlink()
 {
@@ -52,6 +59,13 @@ if [ "$#" -ne 2 ]; then
     exit 1
 fi
 
+#setup host packages
+echo "Setting up required packages (local packages)"
+sudo apt update
+sudo -y apt-get install build-essential cmake unzip gfortran  g++ gperf flex texinfo
+sudo -y apt-get install gawk bison libncurses-dev autoconf automake tar 
+sudo -y apt-get install gcc git bison python gperf pkg-config gdb-multiarch wget 
+
 #create tooling directory and download ARM-Compiler, unpack
 echo "Creating tooling directory"
 
@@ -68,26 +82,51 @@ tar -xvf gcc-linaro-7.5.0-2019.12-x86_64_arm-linux-gnueabihf.tar.xz
 echo "removing compiler binary..."
 rm gcc-linaro-7.5.0-2019.12-x86_64_arm-linux-gnueabihf.tar.xz
 
-#Create Sys-Root
+#Create sysroot for cross-compilation
 cd ~/raspi
 mkdir sysroot sysroot/usr sysroot/opt
 
 #authenticate on py without keys
 echo "Trying to establish ssh-key authentication for your Raspberry Pi"
-echo "Checking first, if you created already an ssh rsa id...."
+echo "Checking first, if you created already an ssh rsa or dsa id...."
 
 
 if [ -f "$IDFILE1" ]; then
     echo "You have an RSA key."
+    echo "Trying to setup your public RSA key on your Raspberry"
+    ssh-copy-id -i $PUBLIC_KEY1 $1
     elif [ -f "$IDFILE2"]; then
     echo "You have an DSA key."
+    echo "Trying to setup your public DSA key on your Raspberry"
+    ssh-copy-id -i $PUBLIC_KEY1 $1
 else
     echo "You have no DSA or RSA key, let's generate one. Calling ssh-keygen..."
     echo "Please choose the default location..."
     echo "Please choose to encrypt the private SSH key and choose a passphrase."
     echo "It is more secure."
-    ssh-keygen
-    echo "Checking for your public key...."
+    
+    #check, what kind of key needs to be created
+    PS3='Please choose the type of key to generate (RSA = r, DSA = d): '
+    options=("r" "d")
+    select opt in "${options[@]}"
+    do
+        case $opt in
+            "r|R")
+                echo "Ok. Let's create an RSA key."
+                ssh-keygen -t rsa -b 4096
+                break
+            ;;
+            "d|D")
+                echo "Ok. Let's create an DSA key"
+                ssh-keygen -t dsa
+                break
+            ;;
+            *) echo "invalid option $REPLY";;
+        esac
+    done
+    
+    
+    echo "Checking for your newly generated public key...."
     if [ -f "$PUBLIC_KEY1" ]; then
         echo "Trying to setup your public RSA key on your Raspberry"
         ssh-copy-id -i $PUBLIC_KEY1 $1
@@ -95,11 +134,19 @@ else
         echo "Trying to setup your public DSA key on your Raspberry"
         ssh-copy-id -i $PUBLIC_KEY1 $1
     else
-        echo "Could not find either an RSA or DSA key. You have to authenticate yourself to rsync"
+        echo "Could not find either an default RSA or default DSA key. You have to authenticate yourself against rsync."
     elif
     
 fi
 
+
+#copy on_rpi.sh script to the pi
+echo "copying on_pi.sh to the Raspberry"
+scp ./on_rpi.sh $1:/home/pi
+
+#set execution flag on the script and run it
+echo "running script to prepare the pi. This may take a while...."
+ssh $1 'chmod +x /home/pi/on_pi.sh && /home/pi/on_pi.sh'
 
 #Sync libraries from Raspberry Pi
 echo "Syncing libraries from Raspberry Pi into Sysroot. Remeber to do this every time you add any libraries to the PI"
@@ -128,21 +175,32 @@ git checkout $2
 #Cross Compile QT
 #configure
 ./configure -release -opengl es2 -device linux-rasp-pi3-g++ -device-option CROSS_COMPILE=~/raspi/tools/gcc-linaro-7.5.0-2019.12-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf- -sysroot ~/raspi/sysroot -opensource -confirm-license -nomake examples -no-compile-examples -skip qtwayland  -skip qtwebengine -make libs -prefix /usr/local/qt5pi -skip qtlocation -v -no-use-gold-linker
-#check for python symlink in /bin folder
-if add_python_symlink $1 ; then
-    echo "building QT, running make...."
-    #build
-    make
-    #setup
-    echo "Installing QT into the raspi directory"
-    make install
-fi
+
+echo "building QT, running make. Grab yourself a coffee and enjoy the show."
+#build
+make
+#setup
+echo "Installing Cross-Compiled qt on the raspi directory"
+make install
 
 #Setup qt5 on the pi
 cd ~/raspi
 rsync -avz qt5pi $1:/usr/local
+ssh $1 sudo ldconfig
 
+#now try to compile a sample, deploy and run it on the pi
+cd ~/qt5/qtbase/examples/opengl/qopenglwidget
+#run qmake
+~/raspi/sysroot/usr/local/qt5pi/bin/qmake
+#run make
+make
+#copy sample to the raspberry
+scp qopenglwidget $1:/home/pi
+#run the sample
 
+ssh $1 /home/pi/qopenglwidget
+
+echo "Done. Enjoy!"
 
 
 
