@@ -2,7 +2,10 @@
 #variables
 FILE="sysroot-relativelinks.py"
 PYLINK="/bin/python"
-
+IDFILE1=~/.ssh/id_rsa.pub
+IDFILE2=~/.ssh/id_dsa.pub
+PUBLIC_KEY1=~/.ssh/id_rsa.pub
+PUBLIC_KEY2=~/.ssh/id_dsa.pub
 
 add_python_symlink()
 {
@@ -69,6 +72,35 @@ rm gcc-linaro-7.5.0-2019.12-x86_64_arm-linux-gnueabihf.tar.xz
 cd ~/raspi
 mkdir sysroot sysroot/usr sysroot/opt
 
+#authenticate on py without keys
+echo "Trying to establish ssh-key authentication for your Raspberry Pi"
+echo "Checking first, if you created already an ssh rsa id...."
+
+
+if [ -f "$IDFILE1" ]; then
+    echo "You have an RSA key."
+    elif [ -f "$IDFILE2"]; then
+    echo "You have an DSA key."
+else
+    echo "You have no DSA or RSA key, let's generate one. Calling ssh-keygen..."
+    echo "Please choose the default location..."
+    echo "Please choose to encrypt the private SSH key and choose a passphrase."
+    echo "It is more secure."
+    ssh-keygen
+    echo "Checking for your public key...."
+    if [ -f "$PUBLIC_KEY1" ]; then
+        echo "Trying to setup your public RSA key on your Raspberry"
+        ssh-copy-id -i $PUBLIC_KEY1 $1
+        elif [ - "$PUBLIC_KEY2" ]; then
+        echo "Trying to setup your public DSA key on your Raspberry"
+        ssh-copy-id -i $PUBLIC_KEY1 $1
+    else
+        echo "Could not find either an RSA or DSA key. You have to authenticate yourself to rsync"
+    elif
+    
+fi
+
+
 #Sync libraries from Raspberry Pi
 echo "Syncing libraries from Raspberry Pi into Sysroot. Remeber to do this every time you add any libraries to the PI"
 rsync -avz --rsync-path="sudo rsync" --delete $1:/lib sysroot
@@ -110,7 +142,6 @@ fi
 cd ~/raspi
 rsync -avz qt5pi $1:/usr/local
 
-#new comment
 
 
 
