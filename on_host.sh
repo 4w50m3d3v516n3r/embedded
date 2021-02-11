@@ -110,7 +110,7 @@ fi
 cd ~/raspi
 rsync -avz qt5pi $1:/usr/local
 
-
+#new comment
 
 
 
