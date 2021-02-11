@@ -98,7 +98,7 @@ if [ -f "$IDFILE1" ]; then
     elif [ -f "$IDFILE2"]; then
     echo "You have an DSA key."
     echo "Trying to setup your public DSA key on your Raspberry"
-    ssh-copy-id -i $PUBLIC_KEY1 $1
+    ssh-copy-id -i $PUBLIC_KEY2 $1
 else
     echo "You have no DSA or RSA key, let's generate one. Calling ssh-keygen..."
     echo "Please choose the default location..."
@@ -127,7 +127,7 @@ else
     
     
     echo "Checking for your newly generated public key...."
-    
+
     if [ -f "$PUBLIC_KEY1" ]; then
         echo "Trying to setup your public RSA key on your Raspberry"
         ssh-copy-id -i $PUBLIC_KEY1 $1
