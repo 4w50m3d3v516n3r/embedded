@@ -131,7 +131,7 @@ else
     if [ -f "$PUBLIC_KEY1" ]; then
         echo "Trying to setup your public RSA key on your Raspberry"
         ssh-copy-id -i $PUBLIC_KEY1 $1
-        elif [ - "$PUBLIC_KEY2" ]; then
+        elif [ -f "$PUBLIC_KEY2" ]; then
         echo "Trying to setup your public DSA key on your Raspberry"
         ssh-copy-id -i $PUBLIC_KEY2 $1
     else
