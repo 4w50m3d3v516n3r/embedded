@@ -51,7 +51,7 @@ add_python_symlink()
 #parameter count check
 if [ "$#" -ne 2 ]; then
     echo "Usage:"
-    echo "on_host.sh RASPBERRY_IP QTVERSION_TO_CHECKOUT"
+    echo "on_host.sh <RASPBERRY_IP> <QTVERSION_TO_CHECKOUT>"
     echo "Example:"
     echo "on_host.sh pi@raspberrypi 5.12"
     echo "or:"
@@ -62,9 +62,9 @@ fi
 #setup host packages
 echo "Setting up required packages (local packages)"
 sudo apt update
-sudo -y apt-get install build-essential cmake unzip gfortran  g++ gperf flex texinfo
-sudo -y apt-get install gawk bison libncurses-dev autoconf automake tar 
-sudo -y apt-get install gcc git bison python gperf pkg-config gdb-multiarch wget 
+sudo apt-get -y install build-essential cmake unzip gfortran  g++ gperf flex texinfo
+sudo apt-get -y install gawk bison libncurses-dev autoconf automake tar 
+sudo apt-get -y install gcc git bison python gperf pkg-config gdb-multiarch wget 
 
 #create tooling directory and download ARM-Compiler, unpack
 echo "Creating tooling directory"
@@ -87,7 +87,7 @@ cd ~/raspi
 mkdir sysroot sysroot/usr sysroot/opt
 
 #authenticate on py without keys
-echo "Trying to establish ssh-key authentication for your Raspberry Pi"
+echo "Trying to establish SSH key-based authentication for your Raspberry Pi"
 echo "Checking first, if you created already an ssh rsa or dsa id...."
 
 
@@ -95,32 +95,32 @@ if [ -f "$IDFILE1" ]; then
     echo "You have an RSA key."
     echo "Trying to setup your public RSA key on your Raspberry"
     ssh-copy-id -i $PUBLIC_KEY1 $1
-    elif [ -f "$IDFILE2"]; then
+    elif [ -f "$IDFILE2" ]; then
     echo "You have an DSA key."
     echo "Trying to setup your public DSA key on your Raspberry"
     ssh-copy-id -i $PUBLIC_KEY2 $1
 else
-    echo "You have no DSA or RSA key, let's generate one. Calling ssh-keygen..."
-    echo "Please choose the default location..."
+    echo "You have no DSA or RSA key, let's generate one."
+    echo "Please choose the default location and file-name..."
     echo "Please choose to encrypt the private SSH key and choose a passphrase."
     echo "It is more secure."
-    
+    echo "Calling ssh-keygen..."
     #check, what kind of key needs to be created
-    PS3='Please choose the type of key to generate (RSA = r, DSA = d): '
-    options=("r" "d")
+    PS3='Please choose the type of key to generate:'
+    options=("1 RSA" "2 DSA")
     select opt in "${options[@]}"
     do
         case $opt in
-            "r|R")
+            "1 RSA")
                 echo "Ok. Let's create an RSA key."
                 ssh-keygen -t rsa -b 4096
                 break
-            ;;
-            "d|D")
+            	;;
+            "2 DSA")
                 echo "Ok. Let's create an DSA key"
                 ssh-keygen -t dsa
                 break
-            ;;
+            	;;
             *) echo "invalid option $REPLY";;
         esac
     done
@@ -136,19 +136,21 @@ else
         ssh-copy-id -i $PUBLIC_KEY2 $1
     else
         echo "Could not find either an default RSA or default DSA key. You have to authenticate yourself against rsync."
-    elif
+    fi
     
 fi
 
 
 #copy on_rpi.sh script to the pi
+cd ~
 echo "copying on_pi.sh to the Raspberry"
 scp ./on_rpi.sh $1:/home/pi
 
 #set execution flag on the script and run it
 echo "running script to prepare the pi, on the pi. This may take a while...."
-ssh $1 'chmod +x /home/pi/on_pi.sh && /home/pi/on_pi.sh'
+ssh $1 'source /home/pi/.bashrc && chmod +x /home/pi/on_rpi.sh && /home/pi/on_rpi.sh'
 
+cd ~/raspi
 #Sync libraries from Raspberry Pi
 echo "Syncing libraries from Raspberry Pi into Sysroot. Remeber to do this every time you add any libraries to the PI"
 rsync -avz --rsync-path="sudo rsync" --delete $1:/lib sysroot
@@ -186,7 +188,7 @@ echo "Installing Cross-Compiled qt on the raspi directory"
 make install
 
 #Setup qt5 on the pi
-cd ~/raspi
+cd ~/raspi/sysroot/usr/local
 rsync -avz qt5pi $1:/usr/local
 ssh $1 sudo ldconfig
 
@@ -203,7 +205,6 @@ scp qopenglwidget $1:/home/pi
 ssh $1 /home/pi/qopenglwidget
 
 echo "Done. Enjoy!"
-
 
 
 
