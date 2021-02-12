@@ -1,39 +1,36 @@
 #!/bin/bash
 
 #variables
-FILE="sysroot-relativelinks.py"
 PYLINK="/bin/python"
 IDFILE1=~/.ssh/id_rsa.pub
 IDFILE2=~/.ssh/id_dsa.pub
 PUBLIC_KEY1=~/.ssh/id_rsa.pub
 PUBLIC_KEY2=~/.ssh/id_dsa.pub
 
-wait_key_press()
-{
-    
+wait_key_press() {
+
     read -n 1 -s -r -p "Press any key to continue"
 }
 
-add_python_symlink()
-{
+add_python_symlink() {
     echo "checking for python symlink in /bin"
-    
-    if [ -L ${PYLINK} ] ; then
-        if [ -e ${PYLINK} ] ; then
+
+    if [ -L ${PYLINK} ]; then
+        if [ -e ${PYLINK} ]; then
             echo "Python is already correctly linked."
             return 0
         else
             echo "Link to python is broken."
         fi
-        elif [ -e ${PYLINK} ] ; then
+    elif [ -e ${PYLINK} ]; then
         echo "Seems not to be a valid symlink, maybe a file"
         return 1
     else
         echo "The symlink to python does not exist."
         echo "Creating a symlink to the most current python version on the system"
-        
+
         pyver=$(ls -1 /bin/python* | grep '[2-3]\{0,\}.$' | sort -r | head -n 1)
-        
+
         if ! [ -z ${pyver} ]; then
             echo "Linking to python in $pyver"
             sudo ln -s $pyver /bin/python
@@ -42,10 +39,9 @@ add_python_symlink()
             echo "cannot find a python interpreter in /bin"
             return 1
         fi
-        
+
     fi
-    
-    
+
 }
 
 #parameter count check
@@ -62,9 +58,9 @@ fi
 #setup host packages
 echo "Setting up required packages (local packages)"
 sudo apt update
-sudo apt-get -y install build-essential cmake unzip gfortran  g++ gperf flex texinfo
-sudo apt-get -y install gawk bison libncurses-dev autoconf automake tar 
-sudo apt-get -y install gcc git bison python gperf pkg-config gdb-multiarch wget 
+sudo apt-get -y install build-essential cmake unzip gfortran g++ gperf flex texinfo
+sudo apt-get -y install gawk bison libncurses-dev autoconf automake tar
+sudo apt-get -y install gcc git bison python gperf pkg-config gdb-multiarch wget
 
 #create tooling directory and download ARM-Compiler, unpack
 echo "Creating tooling directory"
@@ -90,12 +86,11 @@ mkdir sysroot sysroot/usr sysroot/opt
 echo "Trying to establish SSH key-based authentication for your Raspberry Pi"
 echo "Checking first, if you created already an ssh rsa or dsa id...."
 
-
 if [ -f "$IDFILE1" ]; then
     echo "You have an RSA key."
     echo "Trying to setup your public RSA key on your Raspberry"
     ssh-copy-id -i $PUBLIC_KEY1 $1
-    elif [ -f "$IDFILE2" ]; then
+elif [ -f "$IDFILE2" ]; then
     echo "You have an DSA key."
     echo "Trying to setup your public DSA key on your Raspberry"
     ssh-copy-id -i $PUBLIC_KEY2 $1
@@ -108,38 +103,35 @@ else
     #check, what kind of key needs to be created
     PS3='Please choose the type of key to generate:'
     options=("1 RSA" "2 DSA")
-    select opt in "${options[@]}"
-    do
+    select opt in "${options[@]}"; do
         case $opt in
-            "1 RSA")
-                echo "Ok. Let's create an RSA key."
-                ssh-keygen -t rsa -b 4096
-                break
-            	;;
-            "2 DSA")
-                echo "Ok. Let's create an DSA key"
-                ssh-keygen -t dsa
-                break
-            	;;
-            *) echo "invalid option $REPLY";;
+        "1 RSA")
+            echo "Ok. Let's create an RSA key."
+            ssh-keygen -t rsa -b 4096
+            break
+            ;;
+        "2 DSA")
+            echo "Ok. Let's create an DSA key"
+            ssh-keygen -t dsa
+            break
+            ;;
+        *) echo "invalid option $REPLY" ;;
         esac
     done
-    
-    
+
     echo "Checking for your newly generated public key...."
 
     if [ -f "$PUBLIC_KEY1" ]; then
         echo "Trying to setup your public RSA key on your Raspberry"
         ssh-copy-id -i $PUBLIC_KEY1 $1
-        elif [ -f "$PUBLIC_KEY2" ]; then
+    elif [ -f "$PUBLIC_KEY2" ]; then
         echo "Trying to setup your public DSA key on your Raspberry"
         ssh-copy-id -i $PUBLIC_KEY2 $1
     else
         echo "Could not find either an default RSA or default DSA key. You have to authenticate yourself against rsync."
     fi
-    
-fi
 
+fi
 
 #copy on_rpi.sh script to the pi
 cd ~
@@ -178,7 +170,7 @@ git checkout $2
 #Cross Compile QT
 #configure
 echo "Configuring QT"
-./configure -release -opengl es2 -device linux-rasp-pi3-g++ -device-option CROSS_COMPILE=~/raspi/tools/gcc-linaro-7.5.0-2019.12-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf- -sysroot ~/raspi/sysroot -opensource -confirm-license -nomake examples -no-compile-examples -skip qtwayland  -skip qtwebengine -make libs -prefix /usr/local/qt5pi -skip qtlocation -v -no-use-gold-linker
+./configure -release -opengl es2 -device linux-rasp-pi3-g++ -device-option CROSS_COMPILE=~/raspi/tools/gcc-linaro-7.5.0-2019.12-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf- -sysroot ~/raspi/sysroot -opensource -confirm-license -nomake examples -no-compile-examples -skip qtwayland -skip qtwebengine -make libs -prefix /usr/local/qt5pi -skip qtlocation -v -no-use-gold-linker
 
 echo "building QT, running make. Grab yourself a coffee and enjoy the show."
 #build
@@ -205,6 +197,3 @@ scp qopenglwidget $1:/home/pi
 ssh $1 /home/pi/qopenglwidget
 
 echo "Done. Enjoy!"
-
-
-
