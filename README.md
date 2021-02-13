@@ -25,6 +25,13 @@ Then execute on_host.sh:
 ```
 That's it. Good luck!
 
+# Side notes and tipps
+- The virtual machine should at least have 8GB of RAM and 50GB of harddisk space and at least 4 cores
+- Not every version of QT5 will compile, some versions will not even build the samples after a successfull make and make install (could not figure out why until now)
+- Reserve a good amount of time for cross-compiliation. About 2-3 hours. Sometimes even more.
+- General security rule: always check everything that you download from Git or other repositories! It could harm your privacy or worse! Check and understand what you download.
+
+
 
 
 
