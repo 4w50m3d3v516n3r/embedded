@@ -197,3 +197,5 @@ scp qopenglwidget $1:/home/pi
 ssh $1 /home/pi/qopenglwidget
 
 echo "Done. Enjoy!"
+
+wait_key_press
