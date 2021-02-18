@@ -222,8 +222,12 @@ choose_qt_everywhere_version()
         esac
     done
 
+    printf "Extracting archive %s\n" "$QT_ARCHIVE_NAME"
     #Extract archive
-    tar -xf $QT_ARCHIVE_NAME
+    #tar -xf $QT_ARCHIVE_NAME
+    unxz -v --stdout $QT_ARCHIVE_NAME| tar -x
+
+    cd $QT_ARCHIVE_NAME
 
 }
 
