@@ -6,13 +6,14 @@ IDFILE1=~/.ssh/id_rsa.pub
 IDFILE2=~/.ssh/id_dsa.pub
 PUBLIC_KEY1=~/.ssh/id_rsa.pub
 PUBLIC_KEY2=~/.ssh/id_dsa.pub
-
+QT_ARCHIVE_NAME=""
 wait_key_press() {
 
     read -n 1 -s -r -p "Press any key to continue"
 }
 
-add_python_symlink() {
+add_python_symlink() 
+{
     echo "checking for python symlink in /bin"
 
     if [ -L ${PYLINK} ]; then
@@ -41,6 +42,188 @@ add_python_symlink() {
         fi
 
     fi
+
+}
+
+get_qt_from_git() 
+{
+    #Get QT from git, specific branch
+    cd ~
+    git clone https://code.qt.io/qt/qt5.git
+    cd qt5
+    git checkout $2
+    ./init-repository
+}
+
+choose_qt_everywhere_version() 
+{
+    PS3='Please choose the version of QT-Everywhere to download:'
+    options=("1 Version 6.0.1" "2 Version 2 6.0.0" "3 Version 5.15.2"
+        "4 Version 5.15.1" "5 Version 5.15.0" "6 Version 5.12.10"
+        "7 Version 5.12.9" "8 Version 5.12.8" "9 Version 5.12.7"
+        "10 Version 5.12.6" "11 Version 5.12.5" "12 Version 5.12.4"
+        "13 Version 5.12.3" "14 Version 5.12.2" "15 Version 5.12.0"
+        "16 Version 5.9.9" "17 Version 5.9.8" "18 Version 5.9.7"
+        "19 Version 5.9.6" "20 Version 5.9.5" "21 Version 5.9.4"
+        "22 Version 5.9.3" "23 Version 5.9.2" "24 Version 5.9.1" "25 Version 5.9.0")
+    select opt in "${options[@]}"; do
+        case $opt in
+        "1 Version 6.0.1")
+            echo "Downloading Version 6.0.1"
+            QT_ARCHIVE_NAME="qt-everywhere-src-6.0.1.tar.xz"
+            wget https://download.qt.io/official_releases/qt/6.0/6.0.1/single/qt-everywhere-src-6.0.1.tar.xz
+            break
+            ;;
+        "2 Version 2 6.0.0")
+            echo "Downloading Version 6.0.0"
+            QT_ARCHIVE_NAME="qt-everywhere-src-6.0.0.tar.xz"
+            wget https://download.qt.io/official_releases/qt/6.0/6.0.0/single/qt-everywhere-src-6.0.0.tar.xz
+            break
+            ;;
+        "3 Version 5.15.2")
+            echo "Downloading Version 5.15.2"
+            QT_ARCHIVE_NAME="qt-everywhere-src-5.15.2.tar.xz"
+            wget https://download.qt.io/official_releases/qt/5.15/5.15.2/single/qt-everywhere-src-5.15.2.tar.xz
+            break
+            ;;
+        "4 Version 5.15.1")
+            echo "Downloading Version 5.15.1"
+            QT_ARCHIVE_NAME="qt-everywhere-src-5.15.1.tar.xz"
+            wget https://download.qt.io/official_releases/qt/5.15/5.15.1/single/qt-everywhere-src-5.15.1.tar.xz
+            break
+            ;;
+        "5 Version 5.15.0")
+            echo "Downloading Version 5.15.0"
+            QT_ARCHIVE_NAME="qt-everywhere-src-5.15.1.tar.xz"
+            wget https://download.qt.io/official_releases/qt/5.15/5.15.0/single/qt-everywhere-src-5.15.0.tar.xz
+            break
+            ;;
+        "6 Version 5.12.10")
+            echo "Downloading Version 5.15.10"
+            QT_ARCHIVE_NAME="qt-everywhere-src-5.12.10.tar.xz"
+            wget https://download.qt.io/official_releases/qt/5.12/5.12.10/single/qt-everywhere-src-5.12.10.tar.xz
+            break
+            ;;
+        "7 Version 5.12.9")
+            echo "Downloading Version 5.12.9"
+            QT_ARCHIVE_NAME="qt-everywhere-src-5.12.9.tar.xz"
+            wget https://download.qt.io/official_releases/qt/5.12/5.12.9/single/qt-everywhere-src-5.12.9.tar.xz
+            break
+            ;;
+        "8 Version 5.12.8")
+            echo "Downloading Version 5.12.8"
+            QT_ARCHIVE_NAME="qt-everywhere-src-5.12.8.tar.xz"
+            wget https://download.qt.io/official_releases/qt/5.12/5.12.8/single/qt-everywhere-src-5.12.8.tar.xz
+            break
+            ;;
+        "9 Version 5.12.7")
+            echo "Downloading Version 5.12.7"
+            QT_ARCHIVE_NAME="qt-everywhere-src-5.12.7.tar.xz"
+            wget https://download.qt.io/official_releases/qt/5.12/5.12.7/single/qt-everywhere-src-5.12.7.tar.xz
+            break
+            ;;
+        "10 Version 5.12.6")
+            echo "Downloading Version 5.12.6"
+            QT_ARCHIVE_NAME="qt-everywhere-src-5.12.6.tar.xz"
+            wget https://download.qt.io/official_releases/qt/5.12/5.12.6/single/qt-everywhere-src-5.12.6.tar.xz
+            break
+            ;;
+        "11 Version 5.12.5")
+            echo "Downloading Version 5.12.5"
+            QT_ARCHIVE_NAME="qt-everywhere-src-5.12.5.tar.xz"
+            wget https://download.qt.io/official_releases/qt/5.12/5.12.5/single/qt-everywhere-src-5.12.5.tar.xz
+            break
+            ;;
+        "12 Version 5.12.4")
+            echo "Downloading Version 5.12.4"
+            QT_ARCHIVE_NAME="qt-everywhere-src-5.12.4.tar.xz"
+            wget https://download.qt.io/official_releases/qt/5.12/5.12.4/single/qt-everywhere-src-5.12.4.tar.xz
+            break
+            ;;
+        "13 Version 5.12.3")
+            echo "Downloading Version 5.12.3"
+            QT_ARCHIVE_NAME="qt-everywhere-src-5.12.3.tar.xz"
+            wget https://download.qt.io/official_releases/qt/5.12/5.12.3/single/qt-everywhere-src-5.12.3.tar.xz
+            break
+            ;;
+        "14 Version 5.12.2")
+            echo "Downloading Version 5.12.2"
+            QT_ARCHIVE_NAME="qt-everywhere-src-5.12.2.tar.xz"
+            wget https://download.qt.io/official_releases/qt/5.12/5.12.2/single/qt-everywhere-src-5.12.2.tar.xz
+            break
+            ;;
+        "15 Version 5.12.0")
+            echo "Downloading Version 5.12.0"
+            QT_ARCHIVE_NAME="qt-everywhere-src-5.12.0.tar.xz"
+            wget https://download.qt.io/official_releases/qt/5.12/5.12.0/single/qt-everywhere-src-5.12.0.tar.xz
+            break
+            ;;
+        "16 Version 5.9.9")
+            echo "Downloading Version 5.9.9"
+            QT_ARCHIVE_NAME="qt-everywhere-opensource-src-5.9.9.tar.xz"
+            wget https://download.qt.io/official_releases/qt/5.9/5.9.9/single/qt-everywhere-opensource-src-5.9.9.tar.xz
+            break
+            ;;
+        "17 Version 5.9.8")
+            echo "Downloading Version 5.9.8"
+            QT_ARCHIVE_NAME="qt-everywhere-opensource-src-5.9.8.tar.xz"
+            wget https://download.qt.io/official_releases/qt/5.9/5.9.8/single/qt-everywhere-opensource-src-5.9.8.tar.xz
+            break
+            ;;
+        "18 Version 5.9.7")
+            echo "Downloading Version 5.9.7"
+            wget https://download.qt.io/official_releases/qt/5.9/5.9.7/single/qt-everywhere-opensource-src-5.9.7.tar.xz
+            break
+            ;;
+        "19 Version 5.9.6")
+            echo "Downloading Version 5.9.6"
+            QT_ARCHIVE_NAME="qt-everywhere-opensource-src-5.9.6.tar.xz"
+            wget https://download.qt.io/official_releases/qt/5.9/5.9.6/single/qt-everywhere-opensource-src-5.9.6.tar.xz
+            break
+            ;;
+        "20 Version 5.9.5")
+            echo "Downloading Version 5.9.5"
+            QT_ARCHIVE_NAME="qt-everywhere-opensource-src-5.9.5.tar.xz"
+            wget https://download.qt.io/official_releases/qt/5.9/5.9.5/single/qt-everywhere-opensource-src-5.9.5.tar.xz
+            break
+            ;;
+        "21 Version 5.9.4")
+            echo "Downloading Version 5.9.4"
+            QT_ARCHIVE_NAME="qt-everywhere-opensource-src-5.9.4.tar.xz"
+            wget https://download.qt.io/official_releases/qt/5.9/5.9.4/single/qt-everywhere-opensource-src-5.9.4.tar.xz
+            break
+            ;;
+        "22 Version 5.9.3")
+            echo "Downloading Version 5.9.3"
+            QT_ARCHIVE_NAME="qt-everywhere-opensource-src-5.9.3.tar.xz"
+            wget https://download.qt.io/official_releases/qt/5.9/5.9.3/single/qt-everywhere-opensource-src-5.9.3.tar.xz
+            break
+            ;;
+        "23 Version 5.9.2")
+            echo "Downloading Version 5.9.2"
+            QT_ARCHIVE_NAME="qt-everywhere-opensource-src-5.9.2.tar.xz"
+            wget https://download.qt.io/official_releases/qt/5.9/5.9.2/single/qt-everywhere-opensource-src-5.9.2.tar.xz
+            break
+            ;;
+        "24 Version 5.9.1")
+            echo "Downloading Version 5.9.1"
+            QT_ARCHIVE_NAME="qt-everywhere-opensource-src-5.9.1.tar.xz"
+            wget https://download.qt.io/official_releases/qt/5.9/5.9.1/single/qt-everywhere-opensource-src-5.9.1.tar.xz
+            break
+            ;;
+         "25 Version 5.9.0")
+            echo "Downloading Version 5.9.0"
+            QT_ARCHIVE_NAME="qt-everywhere-opensource-src-5.9.0.tar.xz"
+            wget https://download.qt.io/official_releases/qt/5.9/5.9.0/single/qt-everywhere-opensource-src-5.9.0.tar.xz
+            break
+            ;;
+
+        *) echo "invalid option $REPLY" ;;
+        esac
+    done
+
+    #Extract archive
+    tar -xf $QT_ARCHIVE_NAME
 
 }
 
@@ -160,18 +343,86 @@ add_python_symlink
 #TODO: Check if there is a symlink to python, what kind of pyhton naming is used here
 ./sysroot-relativelinks.py sysroot
 
-#Get QT from git, specific branch
-cd ~
-git clone https://code.qt.io/qt/qt5.git
-cd qt5
-git checkout $2
-./init-repository
+#choose to compile  qt from git or download qt-everywhere
+
+PS3='Please choose which source distro to compile:'
+options=("1 QT from GIT" "2 QT-Everywhere")
+select opt in "${options[@]}"; do
+    case $opt in
+    "1 QT from GIT")
+        echo "Ok. Checking out qt from git..."
+        get_qt_from_git "$@"
+        break
+        ;;
+    "2 QT-Everywhere")
+        echo "Ok. Getting and extracting QT-Anywhere..."
+        choose_qt_everywhere_version
+        cd $QT_ARCHIVE_NAME
+        break
+        ;;
+    *) echo "invalid option $REPLY" ;;
+    esac
+done
 
 #Cross Compile QT
 #configure
 echo "Configuring QT"
-./configure -release -opengl es2 -device linux-rasp-pi3-g++ -device-option CROSS_COMPILE=~/raspi/tools/gcc-linaro-7.5.0-2019.12-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf- -sysroot ~/raspi/sysroot -opensource -confirm-license -nomake examples -no-compile-examples -skip qtwayland -skip qtwebengine -make libs -prefix /usr/local/qt5pi -skip qtlocation -v -no-use-gold-linker
+#./configure -release -opengl es2 -device linux-rasp-pi3-g++ -device-option CROSS_COMPILE=~/raspi/tools/gcc-linaro-7.5.0-2019.12-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf- -sysroot ~/raspi/sysroot -opensource -confirm-license -nomake examples -no-compile-examples -skip qtwayland -skip qtwebengine -make libs -prefix /usr/local/qt5pi -skip qtlocation -v -no-use-gold-linker
+#./configure -release -opengl es2 -eglfs -no-pch -no-gtk -device linux-rasp-pi3-vc4-g++ -device-option CROSS_COMPILE=~/raspi/tools/gcc-linaro-7.5.0-2019.12-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf- -sysroot ~/raspi/sysroot -opensource -confirm-license -nomake examples -no-compile-examples -skip qtwayland -skip qtwebengine -qt-pcre -evdev -glib -make libs -prefix /usr/local/qt5pi -skip qtlocation -v
+#./configure -release -opengl es2  -no-pch -no-gtk -device linux-rasp-pi3-vc4-g++ -device-option CROSS_COMPILE=~/raspi/tools/gcc-linaro-7.5.0-2019.12-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf- -sysroot ~/raspi/sysroot -opensource -confirm-license -skip qtwayland -skip qtwebengine -qt-pcre -evdev -glib -make libs - -skip qtlocation -prefix /usr/local/qt5pi -extprefix ~/raspi/qt5pi
 
+./configure \
+    -release \
+    -confirm-license \
+    -opengl es2 \
+    -no-pch \
+    -device-option CROSS_COMPILE=~/raspi/tools/gcc-linaro-7.5.0-2019.12-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf- \
+    -sysroot ~/raspi/sysroot \
+    -device linux-rasp-pi3-vc4-g++ \
+    -prefix "/usr/local/qt5pi" \
+    -bindir "/usr/local/qt5pi/bin" \
+    -libdir "/usr/local/qt5pi/lib" \
+    -docdir "/usr/local/qt5pi/doc" \
+    -headerdir "/usr/local/qt5pi/include/qt5" \
+    -datadir "/usr/local/qt5pi/data" \
+    -archdatadir "/usr/local/qt5pi/lib/qt5archd" \
+    -plugindir "/usr/local/qt5pi/plugins" \
+    -importdir "/usr/local/qt5pi/imports" \
+    -translationdir "/usr/local/qt5pi/translations" \
+    -sysconfdir "/usr/local/qt5pi/xdg" \
+    -examplesdir "/usr/local/qt5pi/lib/examples" \
+    -opensource \
+    -plugin-sql-odbc \
+    -plugin-sql-psql \
+    -plugin-sql-sqlite \
+    -no-sql-sqlite2 \
+    -plugin-sql-tds \
+    -system-sqlite \
+    -system-harfbuzz \
+    -system-zlib \
+    -system-libpng \
+    -system-libjpeg \
+    -system-doubleconversion \
+    -system-pcre \
+    -openssl \
+    -no-rpath \
+    -skip qtwayland \
+    -skip qtwebengine \
+    -skip qtlocation \
+    -verbose \
+    -optimized-qmake \
+    -dbus-linked \
+    -no-strip \
+    -no-separate-debug-info \
+    -qpa xcb \
+    -glib \
+    -icu \
+    -accessibility \
+    -compile-examples \
+    -no-directfb \
+    -no-use-gold-linker \
+    -no-mimetype-database \
+    -no-feature-relocatable
 echo "building QT, running make. Grab yourself a coffee and enjoy the show."
 #build
 make
