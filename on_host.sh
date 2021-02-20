@@ -375,9 +375,6 @@ done
 #Cross Compile QT
 #configure
 echo "Configuring QT"
-#./configure -release -opengl es2 -device linux-rasp-pi3-g++ -device-option CROSS_COMPILE=~/raspi/tools/gcc-linaro-7.5.0-2019.12-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf- -sysroot ~/raspi/sysroot -opensource -confirm-license -nomake examples -no-compile-examples -skip qtwayland -skip qtwebengine -make libs -prefix /usr/local/qt5pi -skip qtlocation -v -no-use-gold-linker
-#./configure -release -opengl es2 -eglfs -no-pch -no-gtk -device linux-rasp-pi3-vc4-g++ -device-option CROSS_COMPILE=~/raspi/tools/gcc-linaro-7.5.0-2019.12-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf- -sysroot ~/raspi/sysroot -opensource -confirm-license -nomake examples -no-compile-examples -skip qtwayland -skip qtwebengine -qt-pcre -evdev -glib -make libs -prefix /usr/local/qt5pi -skip qtlocation -v
-#./configure -release -opengl es2  -no-pch -no-gtk -device linux-rasp-pi3-vc4-g++ -device-option CROSS_COMPILE=~/raspi/tools/gcc-linaro-7.5.0-2019.12-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf- -sysroot ~/raspi/sysroot -opensource -confirm-license -skip qtwayland -skip qtwebengine -qt-pcre -evdev -glib -make libs - -skip qtlocation -prefix /usr/local/qt5pi -extprefix ~/raspi/qt5pi
 
 ./configure \
     -release \
@@ -440,21 +437,10 @@ make install
 
 #Setup qt5 on the pi
 cd ~/raspi/sysroot/usr/local
+
 rsync -avz qt5pi $1:/usr/local
+
 ssh $1 sudo ldconfig
-
-#With the above conifigure line, all examples should be successfully
-#now try to compile a sample, deploy and run it on the pi
-#cd ~/qt5/qtbase/examples/opengl/qopenglwidget
-#run qmake
-#~/raspi/sysroot/usr/local/qt5pi/bin/qmake
-#run make
-#make
-#copy sample to the raspberry
-# unscp qopenglwidget $1:/home/pi
-#run the sample
-
-#ssh $1 /home/pi/qopenglwidget
 
 echo "Done. Enjoy!"
 
