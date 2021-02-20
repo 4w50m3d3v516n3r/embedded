@@ -443,6 +443,7 @@ cd ~/raspi/sysroot/usr/local
 rsync -avz qt5pi $1:/usr/local
 ssh $1 sudo ldconfig
 
+#With the above conifigure line, all examples should be successfully
 #now try to compile a sample, deploy and run it on the pi
 #cd ~/qt5/qtbase/examples/opengl/qopenglwidget
 #run qmake
@@ -453,7 +454,7 @@ ssh $1 sudo ldconfig
 # unscp qopenglwidget $1:/home/pi
 #run the sample
 
-ssh $1 /home/pi/qopenglwidget
+#ssh $1 /home/pi/qopenglwidget
 
 echo "Done. Enjoy!"
 
