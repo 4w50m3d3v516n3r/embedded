@@ -57,6 +57,7 @@ get_qt_from_git()
 
 choose_qt_everywhere_version() 
 {
+    cd ~
     PS3='Please choose the version of QT-Everywhere to download:'
     options=("1 Version 6.0.1" "2 Version 2 6.0.0" "3 Version 5.15.2"
         "4 Version 5.15.1" "5 Version 5.15.0" "6 Version 5.12.10"
@@ -94,7 +95,7 @@ choose_qt_everywhere_version()
             ;;
         "5 Version 5.15.0")
             echo "Downloading Version 5.15.0"
-            QT_ARCHIVE_NAME="qt-everywhere-src-5.15.1.tar.xz"
+            QT_ARCHIVE_NAME="qt-everywhere-src-5.15.0.tar.xz"
             wget https://download.qt.io/official_releases/qt/5.15/5.15.0/single/qt-everywhere-src-5.15.0.tar.xz
             break
             ;;
@@ -225,9 +226,12 @@ choose_qt_everywhere_version()
     printf "Extracting archive %s\n" "$QT_ARCHIVE_NAME"
     #Extract archive
     #tar -xf $QT_ARCHIVE_NAME
-    unxz -v --stdout $QT_ARCHIVE_NAME| tar -x
+    tar -xf $QT_ARCHIVE_NAME
+    rm $QT_ARCHIVE_NAME
+    cd qt-*
 
-    cd $QT_ARCHIVE_NAME
+    
+    
 
 }
 
@@ -361,7 +365,7 @@ select opt in "${options[@]}"; do
     "2 QT-Everywhere")
         echo "Ok. Getting and extracting QT-Anywhere..."
         choose_qt_everywhere_version
-        cd $QT_ARCHIVE_NAME
+      
         break
         ;;
     *) echo "invalid option $REPLY" ;;
@@ -440,13 +444,13 @@ rsync -avz qt5pi $1:/usr/local
 ssh $1 sudo ldconfig
 
 #now try to compile a sample, deploy and run it on the pi
-cd ~/qt5/qtbase/examples/opengl/qopenglwidget
+#cd ~/qt5/qtbase/examples/opengl/qopenglwidget
 #run qmake
-~/raspi/sysroot/usr/local/qt5pi/bin/qmake
+#~/raspi/sysroot/usr/local/qt5pi/bin/qmake
 #run make
-make
+#make
 #copy sample to the raspberry
-scp qopenglwidget $1:/home/pi
+# unscp qopenglwidget $1:/home/pi
 #run the sample
 
 ssh $1 /home/pi/qopenglwidget
