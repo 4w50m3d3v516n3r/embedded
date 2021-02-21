@@ -21,16 +21,19 @@ chmod +x on_host.sh on_rpi.sh
 ```
 Then execute on_host.sh:
 ```console
-.\on_host.sh
+.\on_host.sh <RASPBERRY_IP> <QTVERSION_TO_CHECKOUT>
+
+SAMPLE:
+on_host.sh pi@192.168.177.33 5.12
 ```
-That's it. Good luck!
+Currently you have to give parameter two *<QTVERSION_TO_CHECKOUT>* even if you don't use QT Git-Source.
 
 # Side notes and tipps
 - The virtual machine should at least have 8GB of RAM and 50GB of harddisk space and at least 4 cores
 - Not every version of QT5 will compile, some versions will not even build the samples after a successfull make and make install (could not figure out why until now)
 - Reserve a good amount of time for cross-compiliation. About 2-3 hours. Sometimes even more.
 - General security rule: always check everything that you download from Git or other repositories! It could harm your privacy or worse! Check and understand what you download.
-
+- If you cannot start QT Creator after installing it on Ubuntu, setup *libxcb-xinerama0*
 
 
 
