@@ -1,5 +1,5 @@
-# embedded
-Some bash-scripts for embedded development under Linux.
+# qtpi
+Some bash-scripts for embedded development under Linux. Using QT and crosscompiling it for the raspberry on a Ubuntu 20.04 virtual machine.
 
 # on_host.sh
 This is the main file. It will setup ubuntu 20.04 for cross-compilation of qt5 for the raspberry-pi.
