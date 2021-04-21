@@ -46,10 +46,12 @@ add_python_symlink() {
 
 get_qt_from_git() {
     #Get QT from git, specific branch
+    echo "Please give me the git version to download: " 
+    read -r GITVERSION
     cd ~ || exit
     git clone https://code.qt.io/qt/qt5.git
     cd qt5 || exit
-    git checkout $2
+    git checkout $GITVERSION
     ./init-repository
 }
 
