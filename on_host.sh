@@ -12,8 +12,7 @@ wait_key_press() {
     read -n 1 -s -r -p "Press any key to continue"
 }
 
-add_python_symlink() 
-{
+add_python_symlink() {
     echo "checking for python symlink in /bin"
 
     if [ -L ${PYLINK} ]; then
@@ -45,174 +44,184 @@ add_python_symlink()
 
 }
 
-get_qt_from_git() 
-{
+get_qt_from_git() {
     #Get QT from git, specific branch
-    cd ~
+    cd ~ || exit
     git clone https://code.qt.io/qt/qt5.git
-    cd qt5
+    cd qt5 || exit
     git checkout $2
     ./init-repository
 }
 
-choose_qt_everywhere_version() 
-{
-    cd ~
+choose_qt_everywhere_version() {
+    cd ~ || exit
     PS3='Please choose the version of QT-Everywhere to download:'
-    options=("1 Version 6.0.1" "2 Version 2 6.0.0" "3 Version 5.15.2"
-        "4 Version 5.15.1" "5 Version 5.15.0" "6 Version 5.12.10"
-        "7 Version 5.12.9" "8 Version 5.12.8" "9 Version 5.12.7"
-        "10 Version 5.12.6" "11 Version 5.12.5" "12 Version 5.12.4"
-        "13 Version 5.12.3" "14 Version 5.12.2" "15 Version 5.12.0"
-        "16 Version 5.9.9" "17 Version 5.9.8" "18 Version 5.9.7"
-        "19 Version 5.9.6" "20 Version 5.9.5" "21 Version 5.9.4"
-        "22 Version 5.9.3" "23 Version 5.9.2" "24 Version 5.9.1" "25 Version 5.9.0")
+    options=("1 Version 6.0.3" "2 Version 6.0.2" "3 Version 6.0.1" "4 Version 2 6.0.0" "5 Version 5.15.2"
+        "6 Version 5.15.1" "7 Version 5.15.0" "8 Version 5.12.10"
+        "9 Version 5.12.9" "10 Version 5.12.8" "11 Version 5.12.7"
+        "12 Version 5.12.6" "13 Version 5.12.5" "14 Version 5.12.4"
+        "15 Version 5.12.3" "16 Version 5.12.2" "17 Version 5.12.0"
+        "18 Version 5.9.9" "19 Version 5.9.8" "20 Version 5.9.7"
+        "21 Version 5.9.6" "22 Version 5.9.5" "23 Version 5.9.4"
+        "24 Version 5.9.3" "25 Version 5.9.2" "26 Version 5.9.1" "27 Version 5.9.0")
     select opt in "${options[@]}"; do
         case $opt in
-        "1 Version 6.0.1")
+        "1 Version 6.0.3")
+            echo "Downloading Version 6.0.3"
+            QT_ARCHIVE_NAME="qt-everywhere-src-6.0.3.tar.xz"
+            wget https://download.qt.io/official_releases/qt/6.0/6.0.3/single/qt-everywhere-src-6.0.3.tar.xz
+            break
+            ;;
+        "2 Version 6.0.2")
+            echo "Downloading Version 6.0.2"
+            QT_ARCHIVE_NAME="qt-everywhere-src-6.0.2.tar.xz"
+            wget https://download.qt.io/official_releases/qt/6.0/6.0.2/single/qt-everywhere-src-6.0.2.tar.xz
+            break
+            ;;
+        "3 Version 6.0.1")
             echo "Downloading Version 6.0.1"
             QT_ARCHIVE_NAME="qt-everywhere-src-6.0.1.tar.xz"
             wget https://download.qt.io/official_releases/qt/6.0/6.0.1/single/qt-everywhere-src-6.0.1.tar.xz
             break
             ;;
-        "2 Version 2 6.0.0")
+        "4 Version 2 6.0.0")
             echo "Downloading Version 6.0.0"
             QT_ARCHIVE_NAME="qt-everywhere-src-6.0.0.tar.xz"
             wget https://download.qt.io/official_releases/qt/6.0/6.0.0/single/qt-everywhere-src-6.0.0.tar.xz
             break
             ;;
-        "3 Version 5.15.2")
+        "5 Version 5.15.2")
             echo "Downloading Version 5.15.2"
             QT_ARCHIVE_NAME="qt-everywhere-src-5.15.2.tar.xz"
             wget https://download.qt.io/official_releases/qt/5.15/5.15.2/single/qt-everywhere-src-5.15.2.tar.xz
             break
             ;;
-        "4 Version 5.15.1")
+        "6 Version 5.15.1")
             echo "Downloading Version 5.15.1"
             QT_ARCHIVE_NAME="qt-everywhere-src-5.15.1.tar.xz"
             wget https://download.qt.io/official_releases/qt/5.15/5.15.1/single/qt-everywhere-src-5.15.1.tar.xz
             break
             ;;
-        "5 Version 5.15.0")
+        "7 Version 5.15.0")
             echo "Downloading Version 5.15.0"
             QT_ARCHIVE_NAME="qt-everywhere-src-5.15.0.tar.xz"
             wget https://download.qt.io/official_releases/qt/5.15/5.15.0/single/qt-everywhere-src-5.15.0.tar.xz
             break
             ;;
-        "6 Version 5.12.10")
+        "8 Version 5.12.10")
             echo "Downloading Version 5.15.10"
             QT_ARCHIVE_NAME="qt-everywhere-src-5.12.10.tar.xz"
             wget https://download.qt.io/official_releases/qt/5.12/5.12.10/single/qt-everywhere-src-5.12.10.tar.xz
             break
             ;;
-        "7 Version 5.12.9")
+        "9 Version 5.12.9")
             echo "Downloading Version 5.12.9"
             QT_ARCHIVE_NAME="qt-everywhere-src-5.12.9.tar.xz"
             wget https://download.qt.io/official_releases/qt/5.12/5.12.9/single/qt-everywhere-src-5.12.9.tar.xz
             break
             ;;
-        "8 Version 5.12.8")
+        "10 Version 5.12.8")
             echo "Downloading Version 5.12.8"
             QT_ARCHIVE_NAME="qt-everywhere-src-5.12.8.tar.xz"
             wget https://download.qt.io/official_releases/qt/5.12/5.12.8/single/qt-everywhere-src-5.12.8.tar.xz
             break
             ;;
-        "9 Version 5.12.7")
+        "11 Version 5.12.7")
             echo "Downloading Version 5.12.7"
             QT_ARCHIVE_NAME="qt-everywhere-src-5.12.7.tar.xz"
             wget https://download.qt.io/official_releases/qt/5.12/5.12.7/single/qt-everywhere-src-5.12.7.tar.xz
             break
             ;;
-        "10 Version 5.12.6")
+        "12 Version 5.12.6")
             echo "Downloading Version 5.12.6"
             QT_ARCHIVE_NAME="qt-everywhere-src-5.12.6.tar.xz"
             wget https://download.qt.io/official_releases/qt/5.12/5.12.6/single/qt-everywhere-src-5.12.6.tar.xz
             break
             ;;
-        "11 Version 5.12.5")
+        "13 Version 5.12.5")
             echo "Downloading Version 5.12.5"
             QT_ARCHIVE_NAME="qt-everywhere-src-5.12.5.tar.xz"
             wget https://download.qt.io/official_releases/qt/5.12/5.12.5/single/qt-everywhere-src-5.12.5.tar.xz
             break
             ;;
-        "12 Version 5.12.4")
+        "14 Version 5.12.4")
             echo "Downloading Version 5.12.4"
             QT_ARCHIVE_NAME="qt-everywhere-src-5.12.4.tar.xz"
             wget https://download.qt.io/official_releases/qt/5.12/5.12.4/single/qt-everywhere-src-5.12.4.tar.xz
             break
             ;;
-        "13 Version 5.12.3")
+        "15 Version 5.12.3")
             echo "Downloading Version 5.12.3"
             QT_ARCHIVE_NAME="qt-everywhere-src-5.12.3.tar.xz"
             wget https://download.qt.io/official_releases/qt/5.12/5.12.3/single/qt-everywhere-src-5.12.3.tar.xz
             break
             ;;
-        "14 Version 5.12.2")
+        "16 Version 5.12.2")
             echo "Downloading Version 5.12.2"
             QT_ARCHIVE_NAME="qt-everywhere-src-5.12.2.tar.xz"
             wget https://download.qt.io/official_releases/qt/5.12/5.12.2/single/qt-everywhere-src-5.12.2.tar.xz
             break
             ;;
-        "15 Version 5.12.0")
+        "17 Version 5.12.0")
             echo "Downloading Version 5.12.0"
             QT_ARCHIVE_NAME="qt-everywhere-src-5.12.0.tar.xz"
             wget https://download.qt.io/official_releases/qt/5.12/5.12.0/single/qt-everywhere-src-5.12.0.tar.xz
             break
             ;;
-        "16 Version 5.9.9")
+        "18 Version 5.9.9")
             echo "Downloading Version 5.9.9"
             QT_ARCHIVE_NAME="qt-everywhere-opensource-src-5.9.9.tar.xz"
             wget https://download.qt.io/official_releases/qt/5.9/5.9.9/single/qt-everywhere-opensource-src-5.9.9.tar.xz
             break
             ;;
-        "17 Version 5.9.8")
+        "19 Version 5.9.8")
             echo "Downloading Version 5.9.8"
             QT_ARCHIVE_NAME="qt-everywhere-opensource-src-5.9.8.tar.xz"
             wget https://download.qt.io/official_releases/qt/5.9/5.9.8/single/qt-everywhere-opensource-src-5.9.8.tar.xz
             break
             ;;
-        "18 Version 5.9.7")
+        "20 Version 5.9.7")
             echo "Downloading Version 5.9.7"
             wget https://download.qt.io/official_releases/qt/5.9/5.9.7/single/qt-everywhere-opensource-src-5.9.7.tar.xz
             break
             ;;
-        "19 Version 5.9.6")
+        "21 Version 5.9.6")
             echo "Downloading Version 5.9.6"
             QT_ARCHIVE_NAME="qt-everywhere-opensource-src-5.9.6.tar.xz"
             wget https://download.qt.io/official_releases/qt/5.9/5.9.6/single/qt-everywhere-opensource-src-5.9.6.tar.xz
             break
             ;;
-        "20 Version 5.9.5")
+        "22 Version 5.9.5")
             echo "Downloading Version 5.9.5"
             QT_ARCHIVE_NAME="qt-everywhere-opensource-src-5.9.5.tar.xz"
             wget https://download.qt.io/official_releases/qt/5.9/5.9.5/single/qt-everywhere-opensource-src-5.9.5.tar.xz
             break
             ;;
-        "21 Version 5.9.4")
+        "23 Version 5.9.4")
             echo "Downloading Version 5.9.4"
             QT_ARCHIVE_NAME="qt-everywhere-opensource-src-5.9.4.tar.xz"
             wget https://download.qt.io/official_releases/qt/5.9/5.9.4/single/qt-everywhere-opensource-src-5.9.4.tar.xz
             break
             ;;
-        "22 Version 5.9.3")
+        "24 Version 5.9.3")
             echo "Downloading Version 5.9.3"
             QT_ARCHIVE_NAME="qt-everywhere-opensource-src-5.9.3.tar.xz"
             wget https://download.qt.io/official_releases/qt/5.9/5.9.3/single/qt-everywhere-opensource-src-5.9.3.tar.xz
             break
             ;;
-        "23 Version 5.9.2")
+        "25 Version 5.9.2")
             echo "Downloading Version 5.9.2"
             QT_ARCHIVE_NAME="qt-everywhere-opensource-src-5.9.2.tar.xz"
             wget https://download.qt.io/official_releases/qt/5.9/5.9.2/single/qt-everywhere-opensource-src-5.9.2.tar.xz
             break
             ;;
-        "24 Version 5.9.1")
+        "26 Version 5.9.1")
             echo "Downloading Version 5.9.1"
             QT_ARCHIVE_NAME="qt-everywhere-opensource-src-5.9.1.tar.xz"
             wget https://download.qt.io/official_releases/qt/5.9/5.9.1/single/qt-everywhere-opensource-src-5.9.1.tar.xz
             break
             ;;
-         "25 Version 5.9.0")
+        "27 Version 5.9.0")
             echo "Downloading Version 5.9.0"
             QT_ARCHIVE_NAME="qt-everywhere-opensource-src-5.9.0.tar.xz"
             wget https://download.qt.io/official_releases/qt/5.9/5.9.0/single/qt-everywhere-opensource-src-5.9.0.tar.xz
@@ -228,10 +237,7 @@ choose_qt_everywhere_version()
     #tar -xf $QT_ARCHIVE_NAME
     tar -xf $QT_ARCHIVE_NAME
     rm $QT_ARCHIVE_NAME
-    cd qt-*
-
-    
-    
+    cd qt-* || exit
 
 }
 
@@ -257,9 +263,9 @@ sudo apt-get -y install gcc git bison python gperf pkg-config gdb-multiarch wget
 echo "Creating tooling directory"
 
 mkdir ~/raspi
-cd ~/raspi
+cd ~/raspi || exit
 mkdir tools
-cd tools
+cd tools || exit
 
 #Download ARM Compiler
 echo "Dowloading ARM Compiler... this may take a while...."
@@ -270,7 +276,7 @@ echo "removing compiler binary..."
 rm gcc-linaro-7.5.0-2019.12-x86_64_arm-linux-gnueabihf.tar.xz
 
 #Create sysroot for cross-compilation
-cd ~/raspi
+cd ~/raspi || exit
 mkdir sysroot sysroot/usr sysroot/opt
 
 #authenticate on py without keys
@@ -325,7 +331,7 @@ else
 fi
 
 #copy on_rpi.sh script to the pi
-cd ~
+cd ~ || exit
 echo "copying on_pi.sh to the Raspberry"
 scp ./on_rpi.sh $1:/home/pi
 
@@ -333,7 +339,7 @@ scp ./on_rpi.sh $1:/home/pi
 echo "running script to prepare the pi, on the pi. This may take a while...."
 ssh $1 'source /home/pi/.bashrc && chmod +x /home/pi/on_rpi.sh && /home/pi/on_rpi.sh'
 
-cd ~/raspi
+cd ~/raspi || exit
 #Sync libraries from Raspberry Pi
 echo "Syncing libraries from Raspberry Pi into Sysroot. Remeber to do this every time you add any libraries to the PI"
 rsync -avz --rsync-path="sudo rsync" --delete $1:/lib sysroot
@@ -365,7 +371,7 @@ select opt in "${options[@]}"; do
     "2 QT-Everywhere")
         echo "Ok. Getting and extracting QT-Anywhere..."
         choose_qt_everywhere_version
-      
+
         break
         ;;
     *) echo "invalid option $REPLY" ;;
@@ -436,7 +442,7 @@ echo "Installing Cross-Compiled qt on the raspi directory"
 make install
 
 #Setup qt5 on the pi
-cd ~/raspi/sysroot/usr/local
+cd ~/raspi/sysroot/usr/local || exit
 
 rsync -avz qt5pi $1:/usr/local
 

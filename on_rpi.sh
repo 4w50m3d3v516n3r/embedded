@@ -1,6 +1,7 @@
 #!/bin/bash
 
 #ensure environment is set
+# shellcheck disable=SC1090
 source ~/.bashrc
 
 #first update the pi
@@ -64,6 +65,7 @@ echo /usr/local/qt5pi/lib | sudo tee /etc/ld.so.conf.d/qt5pi.conf
 echo "export QT_QPA_PLATFORM=eglfs" >> ~/.bashrc
 echo "export QT_DEBUG_PLUGINS=1" >> ~/.bashrc
 #apply changes to environment
+# shellcheck disable=SC1090
 source ~/.bashrc
 
 
