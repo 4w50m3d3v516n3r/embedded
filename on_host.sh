@@ -242,13 +242,13 @@ choose_qt_everywhere_version() {
 }
 
 #parameter count check
-if [ "$#" -ne 2 ]; then
+if [ "$#" -ne 1 ]; then
     echo "Usage:"
-    echo "on_host.sh <RASPBERRY_IP> <QTVERSION_TO_CHECKOUT>"
+    echo "on_host.sh <RASPBERRY_IP>"
     echo "Example:"
-    echo "on_host.sh pi@raspberrypi 5.12"
+    echo "on_host.sh pi@raspberrypi"
     echo "or:"
-    echo "on_host.sh pi@192.168.177.33 5.12"
+    echo "on_host.sh pi@192.168.177.33"
     exit 1
 fi
 
