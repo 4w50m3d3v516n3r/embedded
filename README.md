@@ -26,12 +26,11 @@ chmod +x on_host.sh on_rpi.sh
 ```
 Then execute on_host.sh:
 ```console
-.\on_host.sh <RASPBERRY_IP> <QTVERSION_TO_CHECKOUT>
+.\on_host.sh <RASPBERRY_IP>
 
 SAMPLE:
-on_host.sh pi@192.168.177.33 5.12
+on_host.sh pi@192.168.177.33 
 ```
-Currently you have to give parameter two *<QTVERSION_TO_CHECKOUT>* even if you don't use QT Git-Source.
 
 # Side notes and tipps
 
